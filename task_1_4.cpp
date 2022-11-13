@@ -15,39 +15,34 @@ aba
 #include <iostream>
 #include <vector>
 #include <string>
-/*
-bool string_comparator (std::string left , std::string right){ 
-    if (left.length() != right.length()){
-        return (left.length() < right.length());
-    } else {
-        for (int i = 0; i < left.length(); i++){
-            if (left[i] < right[i]){
-                return true;
-            } else if (left[i] > right[i]){
-                return false;
-            }
+
+bool string_comparator(const std::string& left, const std::string& right){
+    int iter1 = 0;
+    int iter2 = 0;
+    while (iter1 < left.length() && iter2 < right.length()){
+        if (left[iter1++] != right[iter2++]){
+            return left[--iter1] < right[--iter2];
         }
-        return false;
     }
-}*/
+    return iter2 != right.length();
+}
 
 void string_sort(std::vector<std::string>& string_collector, int n){
     for (int i = 1; i < n; ++i) {
-    std::string tmp = string_collector[i];
-    int j = i - 1;
-    for (; j >= 0 && tmp.compare(string_collector[j]) < 0; --j) {
-      string_collector[j + 1] = string_collector[j];
-    }
-    string_collector[j + 1] = tmp;
+        std::string tmp = string_collector[i];
+        int j = i - 1;
+        for (; j >= 0 && string_comparator(tmp, string_collector[j]); --j) {
+            string_collector[j + 1] = string_collector[j];
+        }
+        string_collector[j + 1] = tmp;
     }
 }
 
 void string_printer(std::vector<std::string>& string_collector, int n){
-    for (int i = 0; i < n; i++){
-        std::cout << string_collector[i] << '\n';
+    for (const auto& i : string_collector){
+        std::cout << i << '\n';
     }
 }
-
 
 int main(){
     int n = 0;
@@ -61,4 +56,4 @@ int main(){
     string_sort(string_collector, n);
     string_printer(string_collector, n);
     return 0;
-    }
+}
