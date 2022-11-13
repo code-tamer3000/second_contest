@@ -16,10 +16,10 @@ aba
 #include <vector>
 #include <string>
 
-bool string_comparator (const std::string& left, const std::string& right){
+bool string_comparator(const std::string& left, const std::string& right) {
     int iter1 = 0;
     int iter2 = 0;
-    for (; iter1 < left.length() && iter2 < right.length(); ++iter1, ++iter2){
+    for (; iter1 < left.length() && iter2 < right.length(); ++iter1, ++iter2) {
         if (left[iter1] != right[iter2]){
             return left[iter1] < right[iter2];
         }
@@ -27,7 +27,7 @@ bool string_comparator (const std::string& left, const std::string& right){
     return iter2 != right.length();
 }
 
-void string_sort (std::vector<std::string>& string_collector, int n){
+void string_sort(std::vector<std::string>& string_collector, int n) {
     for (int i = 1; i < n; ++i) {
         std::string tmp = string_collector[i];
         int j = i - 1;
@@ -38,17 +38,17 @@ void string_sort (std::vector<std::string>& string_collector, int n){
     }
 }
 
-void string_printer (std::vector<std::string>& string_collector, int n){
+void string_printer(std::vector<std::string>& string_collector, int n) {
     for (const auto& i : string_collector){
         std::cout << i << '\n';
     }
 }
 
-int main(){
+int main() {
     int n = 0;
     std::vector<std::string> string_collector;
     std::cin >> n;
-    for (int i = 0; i < n; i++){
+    for (int i = 0; i < n; i++) {
         std::string temp;
         std::cin >> temp;
         string_collector.push_back(temp);
