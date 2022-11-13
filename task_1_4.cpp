@@ -19,9 +19,9 @@ aba
 bool string_comparator(const std::string& left, const std::string& right){
     int iter1 = 0;
     int iter2 = 0;
-    while (iter1 < left.length() && iter2 < right.length()){
-        if (left[iter1++] != right[iter2++]){
-            return left[--iter1] < right[--iter2];
+    for (; iter1 < left.length() && iter2 < right.length(); ++iter1, ++iter2){
+        if (left[iter1] != right[iter2]){
+            return left[iter1] < right[iter2];
         }
     }
     return iter2 != right.length();
