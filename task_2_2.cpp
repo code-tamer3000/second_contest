@@ -118,10 +118,13 @@ void BuildHeap(std::vector<date>& people, int index, int count) {
 }
 
 int HeapSort(std::vector<date>& people, int index, int count) { 
-    int counter = 0;                           
-    int tmp = 0;  
+    int counter = 1;                           
+    int tmp = 1;  
+    BuildHeap(people, index, count);        //При создании кучи мы заведомо знаем что в ее топе лежит открывающий минимальный отрезок
+    count--;                                //поэтому инициализируем tmp и counter единицами
+    std::swap(people[index], people[count]);
     while (count > 1) {                     //На каждом шаге цикла массив отсортировывается на 1 дату по убыванию
-        BuildHeap(people, index, count);    //мы сразу проверяем открывает или закрывает ли эта дата отрезок времени  
+        SiftDown(people, index, count);     //мы сразу проверяем открывает или закрывает ли эта дата отрезок времени  
         count--;                            //соответственно к концу сортировки мы сразу знаем максимальное наложение таймлайнов
         std::swap(people[index], people[count]);
         if (people[count].is_start) {      
