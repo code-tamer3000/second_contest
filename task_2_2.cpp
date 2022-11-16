@@ -14,7 +14,6 @@
 
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 struct date {
     int day;
@@ -29,8 +28,7 @@ class human {
 
     public:
 
-    human(const date& birth, const date& die) : birth_day(birth.day), birth_month(birth.month), birth_year(birth.year), die_day(die.day), die_month(die.month), die_year(die.year), valid(false) { consructor(); }
-    ~human(){}
+    human(const date& birth, const date& die);
 
     date timeline_start;
     date timeline_end;
@@ -38,8 +36,6 @@ class human {
     bool valid;
 
     private:
-
-    void consructor();
 
     int birth_day;
     int birth_month;
@@ -50,7 +46,7 @@ class human {
     int die_year;
 };
 
-void human::consructor() {
+human::human(const date& birth, const date& die) : birth_day(birth.day), birth_month(birth.month), birth_year(birth.year), die_day(die.day), die_month(die.month), die_year(die.year), valid(false) { 
     if (die_year - birth_year < 18) {
         return;
     } else {
@@ -64,9 +60,9 @@ void human::consructor() {
         timeline_end.is_start = false;
 
         if (die_year - birth_year < 80) {
-        timeline_end.year = die_year;
-        timeline_end.month = die_month;
-        timeline_end.day = die_day;
+            timeline_end.year = die_year;
+            timeline_end.month = die_month;
+            timeline_end.day = die_day;
         } else {
             timeline_end.year = birth_year + 80;
             timeline_end.month = birth_month;
@@ -76,8 +72,8 @@ void human::consructor() {
 }
 
 bool date::operator<(const date& right) { 
-    if (this->year == right.year){
-        if (this->month == right.month){
+    if (this->year == right.year) {
+        if (this->month == right.month) {
             return this->day < right.day;
         } else {
             return this->month < right.month;
@@ -87,11 +83,11 @@ bool date::operator<(const date& right) {
     }
 }
 
-void date_filler(date& date){
+void date_filler(date& date) {
     for (int i = 0; i < 3; i++){
         int num = 0;
         std::cin >> num;
-        if (i == 0){
+        if (i == 0) {
             date.day = num;
         } else if (i == 1) {
             date.month = num;
@@ -101,12 +97,34 @@ void date_filler(date& date){
     }
 }
 
-int contemporaries_counter(std::vector<date>& people, int count){
-    std::sort(people.begin(), people.end());    // после сортировки наш массив представяет timeline от даты появления первой личности
-    int counter = 0;                            // до даты ухода последней. Пробегая по массиву мы фиксируем 
-    int tmp = 0;                                // максимальное количество наложений отрезков
-    for (int i = 0; i < count; i++) {
-        if (people[i].is_start) {
+void SiftDown(std::vector<date>& people, int index, int count) {
+    int left = 2 * index + 1;
+    int right = 2 * index + 2;
+    int less = index;
+    if (left < count && people[left] < people[less])
+        less = left;
+    if (right < count && people[right] < people[less])
+        less = right;
+    if (less != index) {
+        std::swap(people[index], people[less]);
+        SiftDown(people, less, count);
+    } 
+}
+
+void BuildHeap(std::vector<date>& people, int index, int count) {
+    for (int i = count / 2 - 1; i >= 0; --i) {
+        SiftDown(people, i, count);
+    }
+}
+
+int HeapSort(std::vector<date>& people, int index, int count) { 
+    int counter = 0;                           
+    int tmp = 0;  
+    while (count > 1) {                     //На каждом шаге цикла массив отсортировывается на 1 дату по убыванию
+        BuildHeap(people, index, count);    //мы сразу проверяем открывает или закрывает ли эта дата отрезок времени  
+        count--;                            //соответственно к концу сортировки мы сразу знаем максимальное наложение таймлайнов
+        std::swap(people[index], people[count]);
+        if (people[count].is_start) {      
             tmp++;
             if (tmp > counter) {
                 counter = tmp;
@@ -118,23 +136,23 @@ int contemporaries_counter(std::vector<date>& people, int count){
     return counter;
 }
 
-int main(){
+int main() {
     int n = 0;
     std::cin >> n;
     std::vector<date> people;
     int count = 0;
-    for (int i = 0; i < n; i++){
+    for (int i = 0; i < n; i++) {
         date birth;
         date die;
         date_filler(birth);
         date_filler(die);
         human man = human(birth, die);
-        if (man.valid){
+        if (man.valid) {
             people.push_back(man.timeline_start);
             people.push_back(man.timeline_end);
             count += 2;
         }
     }
-    std::cout << contemporaries_counter(people, count) << '\n';
+    std::cout << HeapSort(people, 0, count) << '\n';
     return 0; 
 }
