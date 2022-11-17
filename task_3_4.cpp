@@ -36,7 +36,7 @@ int partition(std::vector<int>& array, int left_bound, int right_bound) {
     }
     std::swap(array[get_random_pivot(left_bound, right_bound)], array[right_bound]);
     int index = right_bound - 1;
-    while (!(index >= left_bound && array[index] < array[right_bound])) {
+    while (index >= left_bound && !(array[index] < array[right_bound])) {
         index--;
     }
     int j_index = index;
