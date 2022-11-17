@@ -36,12 +36,12 @@ int partition(std::vector<int>& array, int left_bound, int right_bound) {
     }
     std::swap(array[get_random_pivot(left_bound, right_bound)], array[right_bound]);
     int index = right_bound - 1;
-    while (index >= left_bound && !(array[index] < array[right_bound])) {
+    while (index >= left_bound && array[right_bound] < array[index]) {
         index--;
     }
     int j_index = index;
     while (--j_index >= left_bound) {
-        if (!(array[j_index] < array[right_bound])) {
+        if (array[right_bound] < array[j_index]) {
             std::swap(array[j_index], array[index]);
             index--;
         }
