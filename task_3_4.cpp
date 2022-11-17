@@ -30,32 +30,33 @@ int get_random_pivot(int left, int right) {
     return left + rand() % (right - left);
 }
 
-int partition(std::vector<int>& massive, int left_bound, int right_bound) {
-    if (left_bound == right_bound){
+int partition(std::vector<int>& array, int left_bound, int right_bound) {
+    if (left_bound == right_bound) {
         return left_bound;
     }
-    std::swap(massive[get_random_pivot(left_bound, right_bound)], massive[right_bound]);
+    std::swap(array[get_random_pivot(left_bound, right_bound)], array[right_bound]);
     int index = right_bound - 1;
-    while (index >= left_bound && massive[index] > massive[right_bound]) {
+    while (!(index >= left_bound && array[index] < array[right_bound])) {
         index--;
     }
     int j_index = index;
     while (--j_index >= left_bound) {
-        if (massive[j_index] > massive[right_bound]) {
-            std::swap(massive[j_index], massive[index]);
+        if (!(array[j_index] < array[right_bound])) {
+            std::swap(array[j_index], array[index]);
             index--;
         }
     }
-    std::swap(massive[++index], massive[right_bound]);
+    std::swap(array[++index], array[right_bound]);
     return index;
 }
 
-int KStat(std::vector<int>& massive, int k) {
-  int left_bound = 0, right_bound = massive.size() - 1;
+int KStat(std::vector<int>& array, int k) {
+  int left_bound = 0;
+  int right_bound = array.size() - 1;
   while (true) {
-    int pivot = partition(massive, left_bound, right_bound);
+    int pivot = partition(array, left_bound, right_bound);
     if (pivot == k) {
-        return massive[pivot];
+        return array[pivot];
     }
     if (pivot < k) {
       left_bound = pivot + 1;
@@ -65,11 +66,11 @@ int KStat(std::vector<int>& massive, int k) {
   }
 }
 
-void input_reader(std::vector<int>& massive, int n) {
+void input_reader(std::vector<int>& array, int n) {
     int tmp = 0;
     for (int i = 0; i < n; i++) {
         std::cin >> tmp;
-        massive.push_back(tmp);
+        array.push_back(tmp);
     }
 }
 
@@ -77,9 +78,9 @@ int main() {
     int n = 0;
     int k = 0;
     std::cin >> n >> k;
-    std::vector<int> massive;
-    input_reader(massive, n);
-    std::cout << KStat(massive, k) << '\n';
+    std::vector<int> array;
+    input_reader(array, n);
+    std::cout << KStat(array, k) << '\n';
     return 0;
     
 }
