@@ -1,3 +1,12 @@
+/*
+Дан массив неотрицательных целых 64-битных чисел. Количество чисел не больше 1000000.
+Отсортировать массив методом поразрядной сортировки LSD по байтам.
+
+Ввод:           Вывод:
+3               4 7 1000000
+4 1000000 7
+*/
+
 #include <iostream>
 #include <vector>
 
@@ -33,7 +42,7 @@ void LSD_sort(std::vector<int64_t>& array, int n) {
 }
 
 void array_printer(std::vector<int64_t>& array) {
-    for (const auto& i : array){
+    for (const auto& i : array) {
         std::cout << i << ' ';
     }
     std::cout << '\n';
